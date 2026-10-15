@@ -82,7 +82,7 @@ def websocket_update_task(
     task_id = msg["task_id"]
     updates = msg.get("updates", {})
 
-    last_str = updates["last_performed"]
+    last_str = updates.get("last_performed")
     if last_str:
         parsed = dt_util.parse_datetime(last_str)
         if parsed is None:
@@ -135,7 +135,7 @@ def websocket_get_config(
 
     if not entries:
         connection.send_error(
-            msg["id"], "not_found", "No config entry found for your_domain"
+            msg["id"], "not_found", "No config entry found for home_maintenance"
         )
         return
 

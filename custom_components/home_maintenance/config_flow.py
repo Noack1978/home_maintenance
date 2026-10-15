@@ -8,7 +8,7 @@ from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
     ConfigFlowResult,
-    OptionsFlow,
+    OptionsFlowWithReload,
 )
 from homeassistant.core import callback
 
@@ -23,7 +23,8 @@ from .const import (
 class HomeMaintenanceConfigFlow(ConfigFlow, domain=DOMAIN):
     """Config flow for Home Maintenenance."""
 
-    VERSION = "1.1.0"
+    VERSION = 1
+    MINOR_VERSION = 1
     CONNECTION_CLASS = CONN_CLASS_LOCAL_POLL
 
     async def async_step_user(
@@ -52,28 +53,20 @@ class HomeMaintenanceConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     @callback
-    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
+    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlowWithReload:
         """Handle callback for options flow."""
-        return HomeMaintenanceOptionsFlowHandler(config_entry)
+        return HomeMaintenanceOptionsFlowHandler()
 
 
-class HomeMaintenanceOptionsFlowHandler(OptionsFlow):
-    """Options flow for Home Maintenenance."""
-
-    def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize setup of options flow."""
-        self.config_entry = config_entry
+class HomeMaintenanceOptionsFlowHandler(OptionsFlowWithReload):
+    """Options flow for Home Maintenance (reloads the entry automatically)."""
 
     async def async_step_init(
-        self, user_input: dict[str, Any] | None
+        self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle a flow initialized by the user."""
         if user_input is not None:
-            result = self.async_create_entry(title="", data=user_input)
-            self.hass.async_create_task(
-                self.hass.config_entries.async_reload(self.config_entry.entry_id)
-            )
-            return result
+            return self.async_create_entry(title="", data=user_input)
 
         return self.async_show_form(
             step_id="init",
