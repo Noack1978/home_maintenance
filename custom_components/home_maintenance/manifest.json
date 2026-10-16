@@ -1,0 +1,21 @@
+{
+  "domain": "home_maintenance",
+  "name": "Home Maintenance",
+  "after_dependencies": [
+    "frontend"
+  ],
+  "codeowners": [
+    "@Noack1978"
+  ],
+  "config_flow": true,
+  "dependencies": [
+    "http",
+    "panel_custom",
+    "tag"
+  ],
+  "documentation": "https://github.com/Noack1978/home_maintenance",
+  "iot_class": "local_polling",
+  "issue_tracker": "https://github.com/Noack1978/home_maintenance/issues",
+  "requirements": [],
+  "version": "1.0.0"
+}
